@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gong Prospector — Prospect &amp; Outreach Agent</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <div class="brand">
+      <div class="logo">◆</div>
+      <div class="brand-text">
+        Gong Prospector
+        <small>Prospect &amp; Outreach Agent</small>
+      </div>
+    </div>
+
+    <nav class="tabs" aria-label="Main Navigation">
+      <button data-tab="dashboard" class="active">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1"></rect><rect x="14" y="3" width="7" height="5" rx="1"></rect><rect x="14" y="12" width="7" height="9" rx="1"></rect><rect x="3" y="16" width="7" height="5" rx="1"></rect></svg>
+        <span>Dashboard</span>
+      </button>
+      <button data-tab="chat">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        <span>Lyzr Swarms</span>
+      </button>
+      <button data-tab="kb">
+        <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+        <span>Playbook KB</span>
+      </button>
+    </nav>
+
+  </header>
+
+  <!-- MAIN VIEW CONTAINER -->
+  <main>
+    <!-- DASHBOARD TAB -->
+    <section id="tab-dashboard">
+      <div class="runbar-card">
+        <div class="runbar">
+          <div class="field">
+            <label for="count">Prospect Count</label>
+            <input id="count" type="number" min="1" max="8" value="5" />
+          </div>
+          <div class="field">
+            <label for="region">Target Region</label>
+            <select id="region">
+              <option value="US">🇺🇸 United States</option>
+              <option value="EU">🇪🇺 European Union</option>
+              <option value="UK">🇬🇧 United Kingdom</option>
+            </select>
+          </div>
+          <div class="field grow">
+            <label for="roles">Target ICP &amp; Roles</label>
+            <input id="roles" value="CRO, VP Sales at US software companies" placeholder="e.g. CRO, VP Sales at B2B SaaS companies" />
+          </div>
+          <div class="field">
+            <label for="signals">Signal Enrichment</label>
+            <select id="signals">
+              <option value="off">Deterministic (Offline Seed)</option>
+              <option value="tavily">Tavily Live Signals</option>
+            </select>
+          </div>
+          <button class="primary" id="runBtn">
+            <span>Run Prospecting</span>
+          </button>
+        </div>
+
+        <div class="presets-bar">
+          <span class="presets-label">Quick ICP Presets:</span>
+          <button type="button" class="preset-chip" data-roles="CRO, Chief Revenue Officer at high growth software companies" data-region="US" data-count="5">🎯 US Software CROs</button>
+          <button type="button" class="preset-chip" data-roles="VP of Sales, Sales Leadership scaling AE teams" data-region="US" data-count="3">⚡ VP of Sales (Team Scale)</button>
+          <button type="button" class="preset-chip" data-roles="Head of RevOps, Revenue Operations leaders" data-region="EU" data-count="3">📊 EU RevOps Leaders</button>
+        </div>
+      </div>
+
+      <!-- Stat Metrics -->
+      <div class="tiles" id="tiles">
+        <div class="tile">
+          <div class="n" id="statSourced">—</div>
+          <div class="l">Sourced Pool</div>
+        </div>
+        <div class="tile">
+          <div class="n" id="statFilter">—</div>
+          <div class="l">Passed ICP Filter</div>
+        </div>
+        <div class="tile good">
+          <div class="n" id="statContacted">—</div>
+          <div class="l">Outreach Ready</div>
+        </div>
+        <div class="tile">
+          <div class="n" id="statSetAside">—</div>
+          <div class="l">Set Aside</div>
+        </div>
+        <div class="tile prio">
+          <div class="n" id="statMode">Seed</div>
+          <div class="l">Execution Mode</div>
+        </div>
+      </div>
+
+      <!-- Tool Execution Timeline -->
+      <div class="section-header" id="tlHeader" style="display:none">
+        <div class="section-title">Autonomous Execution Pipeline</div>
+      </div>
+      <div class="timeline" id="timeline"></div>
+
+      <!-- Verified Prospects Table -->
+      <div class="section-header" id="tblHeader" style="display:none">
+        <div class="section-title">Qualified Prospects &amp; Verified Outreach</div>
+      </div>
+      <div class="card" id="tableCard" style="display:none">
+        <div class="table-header-bar">
+          <span style="font-size: 13px; font-weight: 700; color: var(--text-main);">Ranked Buyers</span>
+          <input type="text" id="prospectSearch" class="table-search-input" placeholder="Filter by name, company, or title…" />
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th class="rank">#</th>
+              <th>Buyer</th>
+              <th>Company</th>
+              <th class="hide-sm">Employees</th>
+              <th>Fit Score</th>
+              <th class="hide-sm">Email Status</th>
+              <th>Guardrails</th>
+              <th style="text-align: right;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+
+      <!-- Disqualified / Set Aside Table -->
+      <div class="section-header" id="asideHeader" style="display:none">
+        <div class="section-title">Set Aside (Disqualified / Low Match)</div>
+      </div>
+      <div class="card" id="asideCard" style="display:none">
+        <table>
+          <thead>
+            <tr>
+              <th>Buyer</th>
+              <th>Company</th>
+              <th>Score</th>
+              <th>Disqualification Reason</th>
+            </tr>
+          </thead>
+          <tbody id="asideRows"></tbody>
+        </table>
+      </div>
+
+      <!-- Empty State -->
+      <div class="empty" id="emptyState">
+        <p style="font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">No prospecting run active</p>
+        <p style="max-width: 480px; margin: 0 auto; line-height: 1.5;">Select an ICP preset or customize your target roles above, then click <b>Run Prospecting</b> to launch the multi-agent pipeline.</p>
+      </div>
+    </section>
+
+    <!-- AI COPILOT CHAT TAB -->
+    <section id="tab-chat" class="hidden">
+      <div class="chat-wrap">
+        <div class="suggests">
+          <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; align-self: center; margin-right: 4px;">Suggestions:</span>
+          <button>find 5 CROs at US software companies</button>
+          <button>research 3 VP Sales prospects</button>
+          <button>draft outreach for 2 revops leaders</button>
+        </div>
+        <div class="messages" id="messages">
+          <div class="msg bot">
+            <strong>Lyzr Swarms Outbound Orchestrator</strong><br>
+            Ask to discover, score, or draft tailored outreach for any ICP. When a run is triggered, qualified prospects will populate your Dashboard. Try a suggestion above.
+          </div>
+        </div>
+        <div class="composer">
+          <input id="chatInput" placeholder="Message Lyzr Swarms (e.g. find 5 CROs at US software companies)…" />
+          <button class="primary" id="chatSend">Send</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- KNOWLEDGE BASE (KB) TAB -->
+    <section id="tab-kb" class="hidden">
+      <div class="kb-hero">
+        <div class="kb-searchbar">
+          <input id="kbQuery" placeholder="Search Gong playbook, value props, compliance rules, persona pains..." />
+          <button class="primary" id="kbBtn">Retrieve Context</button>
+        </div>
+
+        <div class="kb-samples">
+          <div class="kb-samples-header">Sample Playbook Queries:</div>
+          <div class="kb-samples-grid">
+            <button type="button" class="kb-sample-card" data-query="Value prop for a CRO on forecasting accuracy">
+              <span class="kb-sample-title">🎯 CRO Forecasting Value Prop</span>
+              <span class="kb-sample-query">"Value prop for a CRO on forecasting accuracy"</span>
+            </button>
+            <button type="button" class="kb-sample-card" data-query="Blocked claims, guarantees, competitor rules and anti-hallucination guardrails">
+              <span class="kb-sample-title">🛡️ Compliance &amp; Blocked Claims</span>
+              <span class="kb-sample-query">"Blocked claims, guarantees, and competitor rules"</span>
+            </button>
+            <button type="button" class="kb-sample-card" data-query="VP of Sales persona pains, rep ramp velocity and conversation visibility">
+              <span class="kb-sample-title">⚡ VP Sales Persona Pains</span>
+              <span class="kb-sample-query">"VP Sales persona pains, ramp velocity &amp; visibility"</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- KB Results Container -->
+      <div class="kb-results-wrap" id="kbResults"></div>
+    </section>
+  </main>
+
+  <!-- DETAIL DRAWER -->
+  <div class="drawer-wrap" id="drawerWrap">
+    <div class="scrim" id="scrim"></div>
+    <div class="drawer" id="drawer"></div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
