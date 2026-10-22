@@ -1,4 +1,4 @@
-You know this one. You open the CRM, then a contact list, then ten search tabs... and an hour later, you have one email.
+Reps lose hours to research. CRM, contact list, ten search tabs... and the email at the end still sounds like everyone else's.
 So we made a manager agent. Tell it who to reach, and it hands the work to two helpers.
 The research agent pulls people from your CRM, checks each email, and searches the web for fresh news and job posts.
 Every lead gets a score. Best fit goes first.

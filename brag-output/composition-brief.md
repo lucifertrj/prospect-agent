@@ -5,7 +5,7 @@ Short launch film with narration for the Prospect and Outreach Agent.
 
 ## Output
 - Composition: `brag-output/composition/` · Render: `brag-output/brag.mp4`
-- 1920x1080, 30fps, 36.93s
+- 1920x1080, 30fps, 38.43s
 
 ## Source material
 - README.md, assets/arch.png (architecture), app/pipeline.py (flow: source → filter → signals → score + rank → gate → outreach → verify), tools/score_prospect.py (account fit, persona fit, intent, timing), frontend/src/index.css (palette, fonts), DashboardPage.tsx ("Run prospecting")
